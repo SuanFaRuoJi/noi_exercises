@@ -7,7 +7,7 @@ OBJECT_FLAG = -c
 TARGET = $1
 
 $1: $1.cpp
-	\$(CC) -o $1 $1.cpp
+	\$(CC) -o $1.out $1.cpp
 
 test: $1
 	./$1 < test_data
