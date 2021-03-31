@@ -6,7 +6,7 @@ C_STANDARD = -std=c11
 OBJECT_FLAG = -c
 TARGET = $1
 
-$1:
+$1: $1.cpp
 	\$(CC) -o $1 $1.cpp
 
 test: $1
