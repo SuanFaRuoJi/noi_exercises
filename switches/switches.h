@@ -1,0 +1,3 @@
+#ifndef SWITCHES_SOLUTION
+#define SWITCHES_SOLUTION
+#endif
