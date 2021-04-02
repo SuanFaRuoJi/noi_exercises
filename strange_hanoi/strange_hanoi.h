@@ -1,0 +1,3 @@
+#ifndef STRANGE_HANOI_SOLUTION
+#define STRANGE_HANOI_SOLUTION
+#endif
