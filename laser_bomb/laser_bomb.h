@@ -1,0 +1,3 @@
+#ifndef LASER_BOMB_SOLUTION
+#define LASER_BOMB_SOLUTION
+#endif
