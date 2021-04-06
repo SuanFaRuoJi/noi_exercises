@@ -13,5 +13,5 @@ test: $1
 	./$1 < test_data
 
 clean:
-	rm -rf *.o $1
+	rm -rf *.o $1.out
 END
