@@ -10,4 +10,4 @@ test: tallest_cow
 	./tallest_cow < test_data
 
 clean:
-	rm -rf *.o tallest_cow
+	rm -rf *.o tallest_cow.out

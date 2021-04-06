@@ -47,6 +47,13 @@ int main() {
             if (max(tail.first, tail.second) > from) {
                 break;
             }
+            int from = min(tail.first, tail.second), to = max(tail.first, tail.second), use = min(tallest[from], tallest[to]) - 1;
+            for (int i = to-1; i>from; i--) {
+                if (tallest[i] != 0) {
+                    break;
+                }
+                tallest[i] = use;
+            }
             stack.pop_back();
         }
         int use = max_height;
@@ -61,12 +68,37 @@ int main() {
         if (tallest[to] == 0) {
             tallest[to] = use;
         }
-        //TODO record each index if they have forward/backward relation
-        //  so that use this information to fill the zeros.
+        int last = 0;
+        use = max_height;
+        if (!stack.empty()) {
+            pair<int, int>& last_pair = stack[stack.size()-1];
+            last = min(last_pair.first, last_pair.second)+1;
+            use = min(tallest[last_pair.first], tallest[last_pair.second]) - 1;
+        }
+        for (int i=from-1; i>=last; i--) {
+            if (tallest[i] != 0) {
+                break;
+            }
+            tallest[i] = use;
+        }
         stack.push_back(*iter);
     }
 
+    while (!stack.empty()) {
+        pair<int, int>& tail = stack[stack.size()-1];
+        int from = min(tail.first, tail.second), to = max(tail.first, tail.second), use = min(tallest[from], tallest[to]) - 1;
+        for (int i = to-1; i>from; i--) {
+            if (tallest[i] != 0) {
+                break;
+            }
+            tallest[i] = use;
+        }
+        stack.pop_back();
+    }
     for (int i=0; i<length; i++) {
+        if (tallest[i] == 0) {
+            tallest[i] = max_height;
+        }
         cout << tallest[i] << endl;
     }
     return 0;
