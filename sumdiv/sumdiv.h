@@ -1,0 +1,3 @@
+#ifndef SUMDIV_SOLUTION
+#define SUMDIV_SOLUTION
+#endif
