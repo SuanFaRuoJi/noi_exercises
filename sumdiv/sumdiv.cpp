@@ -1,85 +1,61 @@
 #include <iostream>
-#include <cstdlib>
-#include <vector>
 #include <utility>
 
-#include "sumdiv.h"
-
-#define ll long long
+#define ll long
 #define HASH 9901
 
 using namespace std;
 
-vector<pair<ll, ll> > decomp (ll num, ll start);
-pair<ll, ll> sum(ll num, ll expo);
+ll sum(ll num, ll expo);
+ll calc(ll num, ll expo) {
+    ll sum = 1;
+    while (expo) {
+        if (expo & 1) {
+            sum = sum * num % HASH;
+        }
+        num = num * num % HASH;
+        expo >>= 1;
+    }
+
+    return sum;
+}
 
 int main() {
     ll A, B;
     cin >> A >> B;
     if (A == 0) {
         cout << 0 << endl;
+        return 0;
     }
-    vector<pair<ll, ll> > decomp_A = decomp(A, 2);
+    if (A == 1) {
+        cout << 1 << endl;
+        return 0;
+    }
     ll result = 1;
-    for (pair<ll, ll>& cur : decomp_A) {
-        cur.second *= B;
+    for (int i = 2; i <= A; i++) {
+        int count = 0;
+        while (A % i == 0) {
+            A /= i;
+            count ++;
+        }
         //cout << cur.first << "^" << cur.second << endl;
-        pair<ll, ll> partial = sum(cur.first % HASH, cur.second);
-        result = (result * partial.first) % HASH;
+        if (count) {
+            result = (result * sum(i % HASH, count * B)) % HASH;
+        }
     }
 
     cout << result << endl;
     return 0;
 }
 
-vector<pair<ll, ll> > decomp (ll num, ll start) {
-    vector<pair<ll, ll> > result;
-    for (ll i=start; i*i<=num; i++) {
-        if (num % i == 0) {
-            ll next = num, count = 0;
-            while (next % i == 0) {
-                count ++;
-                next /= i;
-            }
-            result.push_back(make_pair(i, count));
-            if (next != 1) {
-                vector<pair<ll, ll> > rest = decomp(next, i+1);
-                result.insert(result.end(), rest.cbegin(), rest.cend());
-            }
-            return result;
-        }
-    }
-
-    result.push_back(make_pair(num, 1));
-    return result;
-}
-
-pair<ll, ll> sum(ll num, ll expo) { // returns the result of sum(num^expo) and num^expo itself.
+ll sum(ll num, ll expo) { // returns the result of sum(num^expo) and num^expo itself.
     if (expo == 0) {
-        return make_pair(1, 1);
-    }
-    if (expo == 1) {
-        int remainder = num;
-        return make_pair((remainder+1) % HASH, remainder);
+        return 1;
     }
 
-    bool even = expo % 2 == 0;
-    ll half = expo/2;
-    pair<ll, ll> half_result = sum(num, even ? (half-1) : half);
-    if (even) {
-        ll coef = half_result.second;
-        coef = (coef * (num*num % HASH)) % HASH;
-        coef = (coef+1) % HASH;
-        ll sum = ((half_result.first) * coef) % HASH + (half_result.second * num) % HASH;
-        ll iden = ((half_result.second * num) % HASH) * ((half_result.second * num) % HASH) % HASH;
-        return make_pair(sum, iden);
-
+    if (expo & 1) {
+        return sum(num, expo>>1) * (1 + calc(num, (expo>>1)+1)) % HASH;
     } else {
-        ll coef = half_result.second;
-        coef = (coef * num) % HASH;
-        coef = (coef+1) % HASH;
-        ll sum = ((half_result.first) * coef) % HASH;
-        ll iden = (((half_result.second * half_result.second) % HASH) * num) % HASH;
-        return make_pair(sum, iden);
+        return (sum(num, (expo>>1)-1) * (1 + calc(num, (expo>>1)+1)) + calc(num, expo>>1)) % HASH;
     }
 }
