@@ -1,0 +1,3 @@
+#ifndef BEST_COW_FENCES_SOLUTION
+#define BEST_COW_FENCES_SOLUTION
+#endif
