@@ -8,58 +8,48 @@
 using namespace std;
 
 int cows[100000];
+double pre[100000];
 int N, F;
 
-bool valid(int * arr, long long bar);
+bool valid(double bar);
 
 int main() {
     cin >> N >> F;
 
-    long long sum = 0, l = 1, r;
+    double l = 1, r = 0;
     for (int i=0; i<N; i++) {
         cin >> cows[i];
-        cows[i] = cows[i]*1000;
-        sum += cows[i];
+        r = max(r, (double)cows[i]);
     }
-    r = sum+1;
 
-    while (l+1 < r) {
-        long long mid = (l+r)/2;
-        int use[N];
-        memcpy(use, cows, N * sizeof(int));
-        if (valid(use, mid)) {
+    r+=1;
+
+    while (r - l > 1e-5) {
+        double mid = (l+r)/2;
+        if (valid(mid)) {
             l = mid;
         } else {
             r = mid;
         }
     }
 
-    cout << l << endl;
+    cout << (int)(r*1000) << endl;
     return 0;
 }
 
-bool valid(int * arr, long long bar) {
-    // cout << bar << endl;
-    int arr_length = N;
-    // cout << arr_length << endl;
-    long long pre[arr_length], sum = 0;
-    for (int i=0; i<arr_length; i++) {
-        sum += arr[i] - bar;
-        // cout << sum << "," << arr[i] << " ";
+bool valid(double bar) {
+    double sum = 0;
+    for (int i=0; i<N; i++) {
+        sum += cows[i] - bar;
         pre[i] = sum;
     }
-    // cout << endl;
 
-    long long min_pre = 0, max_pre = pre[F-1];
-    if (max_pre - min_pre >= 0) {
-        return true;
-    }
-    for (int i=F; i<arr_length; i++) {
-        min_pre = min(min_pre, pre[i-F]);
-        max_pre = pre[i];
-        if (max_pre - min_pre >= 0) {
+    double minv = 0;
+    for (int i=F-1; i<N; i++) {
+        if (pre[i] - minv >= 0) {
             return true;
         }
+        minv = min(minv, pre[i-F+1]);
     }
 
     return false;
