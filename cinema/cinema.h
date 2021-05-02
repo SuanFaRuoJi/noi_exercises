@@ -1,0 +1,3 @@
+#ifndef CINEMA_SOLUTION
+#define CINEMA_SOLUTION
+#endif
