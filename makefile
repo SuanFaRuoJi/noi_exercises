@@ -16,6 +16,7 @@ create:
 	touch $(TARGET)/$(TARGET).h
 	./.scripts/generate_header.sh $(TARGET) > $(TARGET)/$(TARGET).h
 	touch $(TARGET)/test_data
+	touch $(TARGET)/description
 	git add $(TARGET)/
 
 clean:
