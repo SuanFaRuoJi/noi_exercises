@@ -1,0 +1,3 @@
+#ifndef EDITOR_SOLUTION
+#define EDITOR_SOLUTION
+#endif
